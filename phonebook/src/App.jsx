@@ -25,8 +25,16 @@ function App() {
     };
 
     if (
-      personService.checkIfPersonExist(persons, newPerson)
+      !personService.checkIfPersonExist(persons, newPerson)
     ) {
+      personService
+        .createPerson(newPerson)
+        .then((returnedPerson) => {
+          setPersons(persons.concat(returnedPerson));
+          setNewName("");
+          setNewNumber("");
+        });
+    } else {
       if (
         window.confirm(
           `${newName} is already added in your notebook. Replace old number with a new one?`
@@ -53,14 +61,6 @@ function App() {
             );
           });
       }
-    } else {
-      personService
-        .createPerson(newPerson)
-        .then((returnedPerson) => {
-          setPersons(persons.concat(returnedPerson));
-          setNewName("");
-          setNewNumber("");
-        });
     }
   };
 
