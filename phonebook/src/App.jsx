@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import Person from "./components/Person";
 import PersonForm from "./components/PersonForm";
 import Filter from "./components/Filter";
+import Notification from "./components/Notification";
+import Error from "./components/Error";
 import personService from "./services/persons";
 
 function App() {
@@ -9,6 +11,8 @@ function App() {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
+  const [message, setMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     personService
@@ -24,16 +28,16 @@ function App() {
       number: newNumber,
     };
 
-    if (
-      !personService.checkIfPersonExist(persons, newPerson)
-    ) {
-      personService
-        .createPerson(newPerson)
-        .then((returnedPerson) => {
-          setPersons(persons.concat(returnedPerson));
-          setNewName("");
-          setNewNumber("");
-        });
+    if (!personService.checkIfPersonExist(persons, newPerson)) {
+      personService.createPerson(newPerson).then((returnedPerson) => {
+        setPersons(persons.concat(returnedPerson));
+        setNewName("");
+        setNewNumber("");
+      });
+      setMessage(`"${newPerson.name}" added successfully`);
+      setTimeout(() => {
+        setMessage(null);
+      }, 3000);
     } else {
       if (
         window.confirm(
@@ -43,9 +47,7 @@ function App() {
         const id = persons.find(
           (person) => person.name === newName
         ).id;
-        const person = persons.find(
-          (person) => person.id === id
-        );
+        const person = persons.find((person) => person.id === id);
         const changedPerson = {
           ...person,
           number: newNumber,
@@ -55,34 +57,42 @@ function App() {
           .updateNumber(id, changedPerson)
           .then((returnedPerson) => {
             setPersons(
-              persons.map((p) =>
-                p.id !== id ? p : returnedPerson
-              )
+              persons.map((p) => (p.id !== id ? p : returnedPerson))
             );
+            setNewName("");
+            setNewNumber("");
+            setMessage(
+              `${changedPerson.name} was updated succesfully`
+            );
+            setTimeout(() => {
+              setMessage(null);
+            }, 3000);
+          })
+          .catch(() => {
+            setErrorMessage(
+              `ERROR: ${newPerson.name} was already deleted from server`
+            );
+            setTimeout(() => {
+              setErrorMessage(null);
+            }, 3000);
+            setPersons(persons.filter((person) => person.id !== id));
+            setNewName("");
+            setNewNumber("");
           });
       }
     }
   };
 
-  const handleNameChange = (e) =>
-    setNewName(e.target.value);
+  const handleNameChange = (e) => setNewName(e.target.value);
 
-  const handleNumberChange = (e) =>
-    setNewNumber(e.target.value);
+  const handleNumberChange = (e) => setNewNumber(e.target.value);
 
-  const handleFilterChange = (e) =>
-    setFilter(e.target.value);
+  const handleFilterChange = (e) => setFilter(e.target.value);
 
   const handleDeletePerson = (id, person) => {
-    if (
-      window.confirm(
-        `Delete "${person}" from your contacts?`
-      )
-    ) {
+    if (window.confirm(`Delete "${person}" from your contacts?`)) {
       personService.deletePerson(id);
-      setPersons(
-        persons.filter((person) => person.id !== id)
-      );
+      setPersons(persons.filter((person) => person.id !== id));
     }
   };
 
@@ -93,6 +103,8 @@ function App() {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={message} />
+      <Error message={errorMessage} />
       <Filter
         filter={filter}
         handleFilterChange={handleFilterChange}

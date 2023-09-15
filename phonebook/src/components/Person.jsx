@@ -1,8 +1,12 @@
 const Person = ({ person, handleDelete }) => {
   return (
-    <div>
-      {person.name} : {person.number} {" -- "}
-      <button onClick={handleDelete}>Delete</button>
+    <div className="person">
+      <b>
+        {person.name} : {person.number} {" -- "}
+      </b>
+      <button className="btn delete" onClick={handleDelete}>
+        Delete
+      </button>
     </div>
   );
 };
