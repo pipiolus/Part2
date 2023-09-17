@@ -1,7 +1,7 @@
-const Search = () => {
+const Search = ({ handleValue }) => {
   return (
     <div>
-      Find countries: <input />
+      Find countries: <input onChange={handleValue} />
     </div>
   );
 };
