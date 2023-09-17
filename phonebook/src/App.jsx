@@ -52,7 +52,6 @@ function App() {
           ...person,
           number: newNumber,
         };
-
         personService
           .updateNumber(id, changedPerson)
           .then((returnedPerson) => {
