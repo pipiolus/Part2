@@ -21,7 +21,7 @@ const Country = ({ countries }) => {
     const country = countries[0];
     const languages = Object.values(country.languages);
     return (
-      <div>
+      <>
         <h2>{country.name.common}</h2>
         <div>
           <p>Capital: {country.capital}</p>
@@ -39,7 +39,7 @@ const Country = ({ countries }) => {
             <div className="flag">{country.flag}</div>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 };

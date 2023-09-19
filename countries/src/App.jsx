@@ -21,12 +21,13 @@ function App() {
   };
 
   const filterArray = (arr, str) => {
-    return arr.filter((obj) =>
-      obj.name.common.toLowerCase().match(str.toLowerCase())
+    return arr.filter(
+      (obj) =>
+        obj.name.common.toLowerCase().match(str.toLowerCase()) ||
+        obj.name.official.toLowerCase().match(str.toLowerCase())
     );
   };
 
-  console.log(filterArray(all, value));
   return (
     <div>
       <h1>Data For Countries</h1>
