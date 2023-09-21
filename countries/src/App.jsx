@@ -13,7 +13,12 @@ function App() {
     axios
       .get("https://studies.cs.helsinki.fi/restcountries/api/all")
       .then((response) => response.data)
-      .then((allCountries) => setCountries(allCountries));
+      .then((allCountries) => setCountries(allCountries))
+      .catch((err) =>
+        alert(
+          `ERROR:${err}. It seems that a problem has ocurred. Try reloading the page`
+        )
+      );
   }, []);
 
   useEffect(() => {
@@ -24,6 +29,13 @@ function App() {
     setSearch(event.target.value);
   };
 
+  const filterArr = (arr, str) => {
+    return arr.filter((obj) =>
+      obj.name.common.toLowerCase().match(str.toLowerCase())
+    );
+  };
+  const filteredCountries = filterArr(countries, search);
+
   const showCountryDetails = (country) => {
     axios
       .get(
@@ -31,13 +43,6 @@ function App() {
       )
       .then((response) => setCountryDetails(response.data));
   };
-
-  const filterArr = (arr, str) => {
-    return arr.filter((obj) =>
-      obj.name.common.toLowerCase().match(str.toLowerCase())
-    );
-  };
-  const filteredCountries = filterArr(countries, search);
 
   return (
     <div>

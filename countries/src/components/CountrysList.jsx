@@ -1,27 +1,14 @@
+import CountryDetails from "./CountryDetail";
+
 const CountrysList = ({ countries, show }) => {
   if (countries.length === 0 || countries.length === 250) return null;
 
   if (countries.length === 1) {
     const country = countries[0];
-    const languages = Object.values(country.languages);
     return (
-      <div>
-        <h2>{country.name.common}</h2>
-        <div>
-          <p>Continent(s): {country.continents}</p>
-          <p>Capital: {country.capital}</p>
-          <p>Area: {country.area} km²</p>
-        </div>
-        <div>
-          <h3>Languages</h3>
-          <ul>
-            {languages.map((lang, index) => (
-              <li key={index}>{lang}</li>
-            ))}
-          </ul>
-        </div>
-        <div className="flag">{country.flag}</div>
-      </div>
+      <>
+        <CountryDetails country={country} />
+      </>
     );
   } else if (countries.length > 1 && countries.length < 10) {
     return (

@@ -1,3 +1,17 @@
+body {
+    text-align: center;
+    background: rgb(192, 200, 197);
+    background: radial-gradient(circle, rgba(192, 200, 197, 1) 17%, rgba(255, 255, 255, 1) 75%);
+}
+
+div {
+    margin-top: 2vh;
+}
+
+p {
+    margin: 7px;
+}
+
 .flag {
-    font-size: 10rem;
+    font-size: 8rem;
 }

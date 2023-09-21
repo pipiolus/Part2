@@ -1,22 +1,28 @@
+import CapitalWeather from "./CapitalWeather";
+
 const CountryDetails = ({ country }) => {
   const languages = Object.values(country.languages);
   return (
     <div>
-      <h2>{country.name.common}</h2>
+      <h1>{country.name.common}</h1>
       <div>
-        <p>Continent(s): {country.continents}</p>
+        <p>Continent: {country.continents}</p>
         <p>Capital: {country.capital}</p>
         <p>Area: {country.area} km²</p>
       </div>
       <div>
-        <h3>Languages</h3>
-        <ul>
+        <h2>Languages:</h2>
+        <div>
           {languages.map((lang, index) => (
-            <li key={index}>{lang}</li>
+            <p key={index}>{lang}</p>
           ))}
-        </ul>
+        </div>
       </div>
-      <div className="flag">{country.flag}</div>
+      <div>
+        <h2>Flag:</h2>
+        <div className="flag">{country.flag}</div>
+        <CapitalWeather country={country} />
+      </div>
     </div>
   );
 };
