@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseUrl = "http://localhost:3001/persons";
+const baseUrl = "/api/persons";
 
 const getAllPersons = () => {
   const request = axios.get(baseUrl);
@@ -23,8 +23,7 @@ const updateNumber = (id, newObj) => {
 const checkIfPersonExist = (arr, obj) => {
   return arr.some(
     (person) =>
-      JSON.stringify(person.name) ===
-      JSON.stringify(obj.name)
+      JSON.stringify(person.name) === JSON.stringify(obj.name)
   );
 };
 
