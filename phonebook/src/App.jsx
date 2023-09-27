@@ -11,7 +11,7 @@ function App() {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
-  const [message, setMessage] = useState(null);
+  const [successMessage, setMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
@@ -25,19 +25,24 @@ function App() {
 
     const newPerson = {
       name: newName,
-      number: newNumber,
+      number: Number(newNumber),
     };
 
     if (!personService.checkIfPersonExist(persons, newPerson)) {
-      personService.createPerson(newPerson).then((returnedPerson) => {
-        setPersons(persons.concat(returnedPerson));
-        setNewName("");
-        setNewNumber("");
-      });
-      setMessage(`"${newPerson.name}" added successfully`);
-      setTimeout(() => {
-        setMessage(null);
-      }, 3000);
+      personService
+        .createPerson(newPerson)
+        .then((returnedPerson) => {
+          setPersons(persons.concat(returnedPerson));
+          setNewName("");
+          setNewNumber("");
+          setMessage(`"${newPerson.name}" added successfully`);
+          setTimeout(() => {
+            setMessage(null);
+          }, 3000);
+        })
+        .catch((error) => {
+          setErrorMessage(error.response.data.error);
+        });
     } else {
       if (
         window.confirm(
@@ -67,10 +72,8 @@ function App() {
               setMessage(null);
             }, 3000);
           })
-          .catch(() => {
-            setErrorMessage(
-              `ERROR: ${newPerson.name} was already deleted from server`
-            );
+          .catch((error) => {
+            setErrorMessage(error);
             setTimeout(() => {
               setErrorMessage(null);
             }, 3000);
@@ -102,7 +105,7 @@ function App() {
   return (
     <div>
       <h1>Phonebook</h1>
-      <Notification message={message} />
+      <Notification message={successMessage} />
       <Error message={errorMessage} />
       <Filter
         filter={filter}
