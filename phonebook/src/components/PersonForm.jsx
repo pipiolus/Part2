@@ -10,11 +10,20 @@ const PersonForm = ({
       <form onSubmit={addPerson}>
         <div className="input">
           <b>name:</b>
-          <input value={newName} onChange={handleNameChange} />
+          <input
+            value={newName}
+            onChange={handleNameChange}
+            placeholder="Min of 3 letters"
+          />
         </div>
         <div className="input">
           <b>number:</b>
-          <input value={newNumber} onChange={handleNumberChange} />
+          <input
+            maxLength={13}
+            value={newNumber}
+            onChange={handleNumberChange}
+            placeholder="xxx-xxxxxxx or xx-xxxxxxxx"
+          />
         </div>
         <div>
           <button className="input add btn" type="submit">

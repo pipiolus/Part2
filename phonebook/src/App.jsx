@@ -20,12 +20,26 @@ function App() {
       .then((initialPersons) => setPersons(initialPersons));
   }, []);
 
+  useEffect(() => {
+    if (successMessage) {
+      setTimeout(() => {
+        setMessage(null);
+      }, 3000);
+    }
+
+    if (errorMessage) {
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 3000);
+    }
+  }, [successMessage, errorMessage]);
+
   const addPerson = (e) => {
     e.preventDefault();
 
     const newPerson = {
       name: newName,
-      number: Number(newNumber),
+      number: newNumber,
     };
 
     if (!personService.checkIfPersonExist(persons, newPerson)) {
@@ -36,12 +50,11 @@ function App() {
           setNewName("");
           setNewNumber("");
           setMessage(`"${newPerson.name}" added successfully`);
-          setTimeout(() => {
-            setMessage(null);
-          }, 3000);
         })
         .catch((error) => {
           setErrorMessage(error.response.data.error);
+          setNewName("");
+          setNewNumber("");
         });
     } else {
       if (
@@ -49,10 +62,10 @@ function App() {
           `${newName} is already added in your notebook. Replace old number with a new one?`
         )
       ) {
-        const id = persons.find(
+        const person = persons.find(
           (person) => person.name === newName
-        ).id;
-        const person = persons.find((person) => person.id === id);
+        );
+        const id = person.id;
         const changedPerson = {
           ...person,
           number: newNumber,
@@ -68,16 +81,9 @@ function App() {
             setMessage(
               `${changedPerson.name} was updated succesfully`
             );
-            setTimeout(() => {
-              setMessage(null);
-            }, 3000);
           })
           .catch((error) => {
-            setErrorMessage(error);
-            setTimeout(() => {
-              setErrorMessage(null);
-            }, 3000);
-            setPersons(persons.filter((person) => person.id !== id));
+            setErrorMessage(error.response.data.error);
             setNewName("");
             setNewNumber("");
           });
